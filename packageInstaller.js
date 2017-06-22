@@ -10,7 +10,8 @@ function packageInstaller(testArray) {
     //Going to store any values that don't have dependencies in Single and any that do in Multi
     var singleStorage = [];
     var multiStorage = {};
-
+    //Going to use Checker to keep all the dependencies for each package organized to look for circular issues
+    var checker = {};
 
     for (var i = 0; i < testArray.length; i++) {
         //First split each entry in the array into a temp array
@@ -52,14 +53,28 @@ function packageInstaller(testArray) {
         }
     }
 
+    //Here's where it checks for the Circular arguments
+    for (var y in multiStorage) {
+        //If package doesn't exist add it with it's dependency in an array
+        if (!checker[y]) {
+            checker[y] = [multiStorage[y]];
+        }
+
+        //If the dependency has a dependency add it to the array for the package
+        if (multiStorage[multiStorage[y]]) {
+            checker[y].push(multiStorage[multiStorage[y]]);
+        }
+        console.log(checker);
+    }
+
     //Return Single Array joined
     return singleStorage.join(", ");
 }
 
-
-console.log(packageInstaller(testArray));
+// packageInstaller(testArray3);
+// console.log(packageInstaller(testArray));
 //Returned KittenService, Ice, CyberPortal, Leetmeme, CamelCaser, Fraudstream
-console.log(packageInstaller(testArray2));
+// console.log(packageInstaller(testArray2));
 //Returned CamelCaser, KittenService
 console.log(packageInstaller(testArray3));
 //Returned Leetmeme, KittenService, Ice, Fraudstream, CyberPortal, CamelCaser
