@@ -26,8 +26,29 @@ function packageInstaller(testArray) {
 
     //Need to add values from multiStorage to singleStorage with the dependency ahead of the package
     for (var x in multiStorage) {
-        if (singleStorage.indexOf(x) === -1) {
-            singleStorage.push(multiStorage[x], x);
+        //Store values for index of X and it's values
+        var posX = singleStorage.indexOf(x);
+        var posVal = singleStorage.indexOf(multiStorage[x]);
+
+        //Next see if x exists in singleStorage
+        if (posX > -1) {
+            //If dependency isn't in array splice it in ahead of x
+            if (posVal < 0) {
+                singleStorage.splice(posX - 1, 0, multiStorage[x]);
+            } else if (posVal > 0 && posVal > posX) {
+                //Is dependency in array but behind X? Splice it out and move it ahead
+                singleStorage.splice(posVal, 1);
+                singleStorage.splice(posX - 1, 0, multiStorage[x]);
+            }
+        } else {
+
+            //If X isn't in the array but dependency is just push X to the end
+            if (posVal > -1) {
+                singleStorage.push(x);
+            } else {
+                //if neither exists in the array push them to the end in order
+                singleStorage.push(multiStorage[x], x);
+            }
         }
     }
 
@@ -37,12 +58,12 @@ function packageInstaller(testArray) {
 
 
 console.log(packageInstaller(testArray));
-//Returned KittenService, Ice, CyberPortal, Leetmeme, KittenService, CamelCaser, Leetmeme, Fraudstream
+//Returned KittenService, Ice, CyberPortal, Leetmeme, CamelCaser, Fraudstream
 console.log(packageInstaller(testArray2));
-//Returned CamelCaser, CamelCaser, KittenService
+//Returned CamelCaser, KittenService
 console.log(packageInstaller(testArray3));
-//Returned KittenService, Fraudstream, CyberPortal, Leetmeme, KittenService, CamelCaser, Leetmeme, Ice
+//Returned Leetmeme, KittenService, Ice, Fraudstream, CyberPortal, CamelCaser
 
-//Next I'll need to remove duplicates and work on making certain that I'm getting the dependencies in the correct order cause
+
 
 
