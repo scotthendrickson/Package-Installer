@@ -64,20 +64,26 @@ function packageInstaller(testArray) {
         if (multiStorage[multiStorage[y]]) {
             checker[y].push(multiStorage[multiStorage[y]]);
         }
-        console.log(checker);
+
+        //See if the dependency exists in checker and if the package is one of it's dependencies. Return false if true
+        if(checker[multiStorage[y]]) {
+            var tempArray = checker[multiStorage[y]];
+            if (tempArray.indexOf(y) > -1) {
+                return false;
+            }
+        }
     }
 
     //Return Single Array joined
     return singleStorage.join(", ");
 }
 
-// packageInstaller(testArray3);
-// console.log(packageInstaller(testArray));
+console.log(packageInstaller(testArray));
 //Returned KittenService, Ice, CyberPortal, Leetmeme, CamelCaser, Fraudstream
-// console.log(packageInstaller(testArray2));
+console.log(packageInstaller(testArray2));
 //Returned CamelCaser, KittenService
 console.log(packageInstaller(testArray3));
-//Returned Leetmeme, KittenService, Ice, Fraudstream, CyberPortal, CamelCaser
+//Returned false
 
 
 
